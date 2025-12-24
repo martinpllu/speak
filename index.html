@@ -1021,12 +1021,23 @@
         };
         audioStream = await navigator.mediaDevices.getUserMedia(constraints);
 
-        // iOS Safari: "unlock" speech synthesis with a silent utterance on user gesture
-        if (window.speechSynthesis && !window.speechUnlocked) {
-          const silentUtterance = new SpeechSynthesisUtterance('');
-          silentUtterance.volume = 0;
-          speechSynthesis.speak(silentUtterance);
-          window.speechUnlocked = true;
+        // iOS Safari: unlock audio context and speech synthesis on user gesture
+        if (!window.audioUnlocked) {
+          // Unlock Web Audio API
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const buffer = audioCtx.createBuffer(1, 1, 22050);
+          const source = audioCtx.createBufferSource();
+          source.buffer = buffer;
+          source.connect(audioCtx.destination);
+          source.start(0);
+
+          // Also unlock speechSynthesis with a space character (empty string doesn't work on iOS)
+          if (window.speechSynthesis) {
+            const unlockUtterance = new SpeechSynthesisUtterance(' ');
+            unlockUtterance.volume = 0.01;
+            speechSynthesis.speak(unlockUtterance);
+          }
+          window.audioUnlocked = true;
         }
 
         let mimeType = 'audio/webm';
@@ -1406,9 +1417,11 @@ Respond naturally as if having a spoken conversation.`;
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1;
       utterance.pitch = 1;
+      utterance.volume = 1;
 
       // Select voice
       const voices = speechSynthesis.getVoices();
+      console.log('Available voices:', voices.length, voices.map(v => v.name));
       let voice = null;
 
       if (selectedVoiceName) {
@@ -1428,6 +1441,7 @@ Respond naturally as if having a spoken conversation.`;
       }
 
       if (voice) utterance.voice = voice;
+      console.log('Speaking with voice:', voice?.name || 'default', 'text:', text.substring(0, 50));
 
       // iOS Safari fix: onend often doesn't fire, use timeout as fallback
       let ended = false;

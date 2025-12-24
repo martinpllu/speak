@@ -694,6 +694,32 @@
       color: var(--fg);
     }
 
+    /* Current voice display */
+    .current-voice {
+      padding: 0.75rem;
+      margin: 0 0.5rem 0.75rem;
+      background: var(--bg);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .current-voice-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .current-voice-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--fg);
+    }
+
     /* Cloud toggle */
     .cloud-toggle {
       padding: 0 0.5rem 1rem;
@@ -828,6 +854,10 @@
         <button class="modal-close" id="modalClose">&times;</button>
       </div>
       <div class="modal-body">
+        <div class="current-voice" id="currentVoice">
+          <span class="current-voice-label">Current:</span>
+          <span class="current-voice-name" id="currentVoiceName">None selected</span>
+        </div>
         <div class="cloud-toggle">
           <label class="toggle-row">
             <span class="toggle-label">
@@ -1613,7 +1643,14 @@ Respond naturally as if having a spoken conversation.`;
         }
       }
 
-      if (voice) utterance.voice = voice;
+      if (voice) {
+        utterance.voice = voice;
+        // Save the auto-selected voice so it shows as selected in UI
+        if (!selectedVoiceName) {
+          selectedVoiceName = voice.name;
+          localStorage.setItem('selectedVoice', voice.name);
+        }
+      }
 
       // iOS Safari fix: onend often doesn't fire, use timeout as fallback
       let ended = false;
@@ -1706,12 +1743,19 @@ Respond naturally as if having a spoken conversation.`;
       if (toggle) toggle.checked = cloudVoicesEnabled;
       if (toggleContainer) toggleContainer.style.display = hasCloudVoices ? '' : 'none';
 
+      // Update current voice display
+      const currentVoiceEl = document.getElementById('currentVoiceName');
+      if (currentVoiceEl) {
+        currentVoiceEl.textContent = selectedVoiceName || 'None selected';
+      }
+
       englishVoices.forEach(voice => {
         const isSelected = selectedVoiceName === voice.name;
         const isCloud = isCloudVoice(voice);
         const isRec = isRecommended(voice);
         const item = document.createElement('div');
         item.className = `voice-item${isSelected ? ' selected' : ''}`;
+        item.dataset.voiceName = voice.name;
 
         let badges = '';
         if (isRec) badges += '<span class="voice-recommended-badge">recommended</span>';
@@ -1744,9 +1788,14 @@ Respond naturally as if having a spoken conversation.`;
       selectedVoiceName = voiceName;
       localStorage.setItem('selectedVoice', voiceName);
       document.querySelectorAll('.voice-item').forEach(item => {
-        const name = item.querySelector('.voice-name').textContent;
+        const name = item.dataset.voiceName;
         item.classList.toggle('selected', name === voiceName);
       });
+      // Update current voice display
+      const currentVoiceEl = document.getElementById('currentVoiceName');
+      if (currentVoiceEl) {
+        currentVoiceEl.textContent = voiceName;
+      }
     }
 
     function previewVoice(voice) {

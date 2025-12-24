@@ -777,7 +777,7 @@
           <label class="toggle-row">
             <span class="toggle-label">
               <span class="toggle-title">Cloud voices</span>
-              <span class="toggle-desc">Higher quality, but text is sent to Google</span>
+              <span class="toggle-desc">Higher quality, but text is sent to third party services</span>
             </span>
             <input type="checkbox" id="cloudVoicesToggle">
             <span class="toggle-switch"></span>
@@ -1594,13 +1594,17 @@ Respond naturally as if having a spoken conversation.`;
         englishVoices = englishVoices.filter(v => !isCloudVoice(v));
       }
 
-      // Sort: Premium/Enhanced first, then alphabetical
+      // Check if any cloud voices exist
+      const allVoices = speechSynthesis.getVoices();
+      const hasCloudVoices = allVoices.some(v => v.lang.startsWith('en') && isCloudVoice(v));
+
+      // Sort: Cloud voices first (if enabled), then Premium/Enhanced, then alphabetical
       englishVoices.sort((a, b) => {
         const aCloud = isCloudVoice(a);
         const bCloud = isCloudVoice(b);
-        // Cloud voices at the end when enabled
-        if (aCloud && !bCloud) return 1;
-        if (!aCloud && bCloud) return -1;
+        // Cloud voices at the top when enabled
+        if (aCloud && !bCloud) return -1;
+        if (!aCloud && bCloud) return 1;
         const aPremium = a.name.includes('Premium') || a.name.includes('Enhanced');
         const bPremium = b.name.includes('Premium') || b.name.includes('Enhanced');
         if (aPremium && !bPremium) return -1;
@@ -1610,9 +1614,11 @@ Respond naturally as if having a spoken conversation.`;
 
       voiceList.innerHTML = '';
 
-      // Update toggle state
+      // Update toggle state and visibility
       const toggle = document.getElementById('cloudVoicesToggle');
+      const toggleContainer = document.querySelector('.cloud-toggle');
       if (toggle) toggle.checked = cloudVoicesEnabled;
+      if (toggleContainer) toggleContainer.style.display = hasCloudVoices ? '' : 'none';
 
       englishVoices.forEach(voice => {
         const isSelected = selectedVoiceName === voice.name;

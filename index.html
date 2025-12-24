@@ -628,7 +628,8 @@
       color: var(--fg);
     }
 
-    .voice-cloud-badge {
+    .voice-cloud-badge,
+    .voice-recommended-badge {
       font-size: 0.55rem;
       color: var(--fg-muted);
       background: var(--bg);
@@ -637,6 +638,60 @@
       margin-left: 0.4rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+    }
+
+    .voice-recommended-badge {
+      color: var(--success);
+      background: rgba(90, 138, 94, 0.1);
+    }
+
+    /* Voice help */
+    .voice-help {
+      padding: 0 0.5rem 0.75rem;
+    }
+
+    .voice-help-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--link);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .voice-help-btn:hover {
+      text-decoration: underline;
+    }
+
+    .voice-help-content {
+      margin-top: 0.6rem;
+      padding: 0.75rem;
+      background: var(--bg);
+      border-radius: 4px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1.5;
+      color: var(--fg-muted);
+    }
+
+    .voice-help-content.hidden {
+      display: none;
+    }
+
+    .voice-help-content p {
+      margin: 0 0 0.5rem;
+    }
+
+    .voice-help-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .voice-help-content strong {
+      color: var(--fg);
     }
 
     /* Cloud toggle */
@@ -782,6 +837,21 @@
             <input type="checkbox" id="cloudVoicesToggle">
             <span class="toggle-switch"></span>
           </label>
+        </div>
+        <div class="voice-help" id="voiceHelp">
+          <button class="voice-help-btn" id="voiceHelpBtn">
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            How to install better voices
+          </button>
+          <div class="voice-help-content hidden" id="voiceHelpContent">
+            <p><strong>macOS:</strong> System Settings → Accessibility → Spoken Content → System Voice → Manage Voices</p>
+            <p><strong>iOS:</strong> Settings → Accessibility → Spoken Content → Voices → English</p>
+            <p>Download voices marked "Premium" or "Enhanced" for best quality.</p>
+          </div>
         </div>
         <div class="voice-list" id="voiceList"></div>
       </div>
@@ -1585,6 +1655,17 @@ Respond naturally as if having a spoken conversation.`;
       return voice.localService === false;
     }
 
+    // Recommended voices - high quality on-device voices
+    const recommendedVoices = [
+      'Samantha (Enhanced)', 'Ava (Premium)', 'Zoe (Premium)', 'Tom (Enhanced)',
+      'Serena (Premium)', 'Daniel (Enhanced)', 'Karen (Enhanced)',
+      'Google UK English Female', 'Google UK English Male', 'Google US English'
+    ];
+
+    function isRecommended(voice) {
+      return recommendedVoices.some(name => voice.name.includes(name));
+    }
+
     function populateVoiceList() {
       const voices = speechSynthesis.getVoices();
       let englishVoices = voices.filter(v => v.lang.startsWith('en'));
@@ -1598,11 +1679,16 @@ Respond naturally as if having a spoken conversation.`;
       const allVoices = speechSynthesis.getVoices();
       const hasCloudVoices = allVoices.some(v => v.lang.startsWith('en') && isCloudVoice(v));
 
-      // Sort: Cloud voices first (if enabled), then Premium/Enhanced, then alphabetical
+      // Sort: Recommended first, then Cloud (if enabled), then Premium/Enhanced, then alphabetical
       englishVoices.sort((a, b) => {
+        const aRec = isRecommended(a);
+        const bRec = isRecommended(b);
+        // Recommended voices at the very top
+        if (aRec && !bRec) return -1;
+        if (!aRec && bRec) return 1;
         const aCloud = isCloudVoice(a);
         const bCloud = isCloudVoice(b);
-        // Cloud voices at the top when enabled
+        // Cloud voices next when enabled
         if (aCloud && !bCloud) return -1;
         if (!aCloud && bCloud) return 1;
         const aPremium = a.name.includes('Premium') || a.name.includes('Enhanced');
@@ -1623,12 +1709,18 @@ Respond naturally as if having a spoken conversation.`;
       englishVoices.forEach(voice => {
         const isSelected = selectedVoiceName === voice.name;
         const isCloud = isCloudVoice(voice);
+        const isRec = isRecommended(voice);
         const item = document.createElement('div');
         item.className = `voice-item${isSelected ? ' selected' : ''}`;
+
+        let badges = '';
+        if (isRec) badges += '<span class="voice-recommended-badge">recommended</span>';
+        if (isCloud) badges += '<span class="voice-cloud-badge">cloud</span>';
+
         item.innerHTML = `
           <div class="voice-radio"></div>
           <div class="voice-info">
-            <div class="voice-name">${voice.name}${isCloud ? '<span class="voice-cloud-badge">cloud</span>' : ''}</div>
+            <div class="voice-name">${voice.name}${badges}</div>
             <div class="voice-lang">${voice.lang}</div>
           </div>
           <button class="voice-preview">Preview</button>
@@ -1746,6 +1838,11 @@ Respond naturally as if having a spoken conversation.`;
       modalClose.addEventListener('click', closeVoiceSettings);
       voiceModal.addEventListener('click', (e) => {
         if (e.target === voiceModal) closeVoiceSettings();
+      });
+
+      // Voice help toggle
+      document.getElementById('voiceHelpBtn').addEventListener('click', () => {
+        document.getElementById('voiceHelpContent').classList.toggle('hidden');
       });
 
       // Cloud voices toggle

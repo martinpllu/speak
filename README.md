@@ -1,20 +1,22 @@
 # Speak
 
-A simple, private voice interface for AI. No app to install, no subscription, just a single HTML file.
+**A private, cheap, simple voice interface for AI.** 
+
+*Requires an OpenRouter account. No subscription: pay-as-you-go with low cost.*
 
 ## Features
 
 - **Private** - Zero Data Retention at every layer. No conversation history, no transcripts.
-- **Simple** - One HTML file. Host it yourself or use ours.
+- **Simple and self-hostable** - One HTML file. Host it yourself or use it [here](https://martinpllu.github.io/speak/)
 - **No subscription** - Pay only for what you use via OpenRouter (fractions of a cent per conversation).
 - **Voice only** - Just you and the AI, talking.
 - **Works everywhere** - Desktop and mobile, any modern browser.
 
 ## Privacy
 
-ChatGPT, Claude and Gemini store every conversation against your account. Speak doesn't.
+ChatGPT, Claude and Gemini apps store every conversation against your account. Speak doesn't.
 
-This app has no backend—it's just a static HTML file. Your conversations go through [OpenRouter](https://openrouter.ai) to Google Vertex with **Zero Data Retention (ZDR)** enabled. This means:
+This app has no backend—it's just a static HTML file. Your conversations go through [OpenRouter](https://openrouter.ai) to Gemini Flash 3 on Google Vertex with **Zero Data Retention (ZDR)** enabled. This means:
 
 - **This app**: No backend, no data collection
 - **OpenRouter**: No conversation content stored, only metadata (timestamps, usage)
@@ -28,7 +30,7 @@ Your voice is recorded in the browser, sent to the AI model via OpenRouter, and 
 
 ## Cost
 
-The app uses Gemini Flash which works well at very low cost. Conversations typically cost a fraction of a cent, or a couple of cents with web search enabled. A few dollars of OpenRouter credit will last a long time.
+The app uses Gemini Flash 3 which works well at very low cost. Conversations typically cost a fraction of a cent, or a couple of cents with web search enabled. A few dollars of OpenRouter credit will usually last a long time.
 
 ## Getting Started
 

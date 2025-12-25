@@ -1,24 +1,33 @@
 # Speak
 
-A simple, private voice interface for AI.
+A simple voice interface for AI. No app to install, no subscription, just a single HTML file.
 
-## Why Speak?
+## Features
 
-- **Private** - No backend server. No AI lab collecting your data. Your conversations go directly to OpenRouter and nowhere else. Nothing is stored or logged. 
+- **Simple** - One HTML file. Host it yourself or use ours.
+- **No subscription** - Pay only for what you use via OpenRouter (fractions of a cent per conversation).
 - **Voice only** - Just you and the AI, talking.
-- **Simple** - A single HTML file that you can copy and host anywhere.
+- **Works everywhere** - Desktop and mobile, any modern browser.
+
+## Privacy
+
+ChatGPT, Claude and Gemini store every conversation against your account. Speak doesn't.
+
+This app has no backend—it's just a static HTML file. Your conversations go through [OpenRouter](https://openrouter.ai) to Google Vertex with **Zero Data Retention (ZDR)** enabled. This means:
+
+- **This app**: No backend, no data collection
+- **OpenRouter**: No conversation content stored, only metadata (timestamps, usage)
+- **Google Vertex**: Zero Data Retention—your prompts and responses are not stored or logged
+
+No conversation history. No transcripts. No record of what you said.
 
 ## How it Works
 
-Speak uses [OpenRouter](https://openrouter.ai) to connect to AI models. OpenRouter is an API gateway that provides access to various AI models (like Google's Gemini) through a single account.
-
-Your voice is recorded in the browser, sent to the AI model via OpenRouter, and the response is spoken back to you using your device's text-to-speech. That's it.
+Your voice is recorded in the browser, sent to the AI model via OpenRouter, and the response is spoken back using your device's text-to-speech. That's it.
 
 ## Cost
 
-The app currently uses Gemini Flash 3 which works well at a very low cost.
-
-Conversations typically cost a fraction of a cent, or a couple of cents if web search is enabled. A few dollars of OpenRouter credit will last a long time.
+The app uses Gemini Flash which works well at very low cost. Conversations typically cost a fraction of a cent, or a couple of cents with web search enabled. A few dollars of OpenRouter credit will last a long time.
 
 ## Getting Started
 
@@ -26,18 +35,13 @@ Conversations typically cost a fraction of a cent, or a couple of cents if web s
 2. **Add credits** - $5 is plenty to start (Settings → Credits)
 3. **Open Speak** at https://martinpllu.github.io/speak
 4. **Connect** with your OpenRouter account
-5. **Tap the button** or press Space to talk on desktop.
+5. **Tap the button** or press Space to talk
 
-## Features
+## Self-Hosting
 
-- Push-to-talk with spacebar shortcut
-- Web search toggle for current information
-- Voice selection for text-to-speech
-- Works on desktop and mobile
-
-## Local Development
+It's just one HTML file. Download `index.html` and serve it from anywhere.
 
 ```bash
 python3 -m http.server 3000
-# Open http://localhost:3000/
+# Open http://localhost:3000
 ```

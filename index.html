@@ -1407,7 +1407,12 @@ Respond naturally as if having a spoken conversation.`;
                   { type: 'input_audio', input_audio: { data: base64Audio, format: 'wav' } }
                 ]
               }
-            ]
+            ],
+            provider: {
+              only: ['google-vertex'],
+              allow_fallbacks: false,
+              zdr: true
+            }
           })
         });
 

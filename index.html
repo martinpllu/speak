@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Speak</title>
+  <title>Shy</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23f5f0e8'/><circle cx='50' cy='50' r='28' fill='none' stroke='%232d2a24' stroke-width='3' stroke-dasharray='120 60' stroke-linecap='round'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet">
@@ -52,6 +53,20 @@
 
     .login-screen.hidden {
       display: none;
+    }
+
+    .logo {
+      margin-bottom: 1.5rem;
+      opacity: 0.7;
+    }
+
+    .logo svg {
+      animation: logoSpin 20s linear infinite;
+    }
+
+    @keyframes logoSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .login-screen h1 {
@@ -890,8 +905,13 @@
 
   <!-- Login Screen -->
   <div class="login-screen" id="loginScreen">
-    <h1>Speak</h1>
-    <p>Voice interface for AI</p>
+    <div class="logo">
+      <svg width="48" height="48" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="28" fill="none" stroke="var(--fg)" stroke-width="4" stroke-dasharray="120 60" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>Shy</h1>
+    <p>Private voice for AI</p>
     <button class="login-btn" id="loginBtn">Connect with OpenRouter</button>
   </div>
 
@@ -1392,7 +1412,7 @@ Respond naturally as if having a spoken conversation.`;
             'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
             'HTTP-Referer': window.location.origin,
-            'X-Title': 'Speak'
+            'X-Title': 'Shy'
           },
           body: JSON.stringify({
             model: getModel(),

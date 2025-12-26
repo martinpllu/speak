@@ -1,32 +1,45 @@
-# Speak
+# Shy
 
-**A private, cheap, simple voice interface for AI.** 
+**A private, simple, self-hostable voice interface for AI.**
 
-*Requires an OpenRouter account. No subscription: pay-as-you-go with low cost.*
+Voice chats with AI require subscriptions, and every word is recorded by an AI lab. Shy gives you a voice conversation that leaves no trace—no transcripts, no history, nothing stored.
+
+*Requires an OpenRouter account. Pay-as-you-go with low cost and privacy guarantees.*
 
 ## Features
 
 - **Private** - Zero Data Retention at every layer. No conversation history, no transcripts.
-- **Simple and self-hostable** - One HTML file. Host it yourself or use it [here](https://martinpllu.github.io/speak/)
+- **Simple and self-hostable** - One HTML file. Host it yourself or use it [here](https://martinpllu.github.io/shy/)
 - **No subscription** - Pay only for what you use via OpenRouter (fractions of a cent per conversation).
 - **Voice only** - Just you and the AI, talking.
 - **Works everywhere** - Desktop and mobile, any modern browser.
 
 ## Privacy
 
-ChatGPT, Claude and Gemini apps store every conversation against your account. Speak doesn't.
+ChatGPT, Claude and Gemini apps store every conversation against your account. Shy doesn't.
 
-This app has no backend—it's just a static HTML file. Your conversations go through [OpenRouter](https://openrouter.ai) to Gemini Flash 3 on Google Vertex with **Zero Data Retention (ZDR)** enabled. This means:
+The app has no backend - it's a static HTML file. Your conversations go through [OpenRouter](https://openrouter.ai) to Gemini Flash 3 on Google Vertex with **Zero Data Retention (ZDR)** enabled. This means:
 
 - **This app**: No backend, no data collection
 - **OpenRouter**: No conversation content stored, only metadata (timestamps, usage)
 - **Google Vertex**: Zero Data Retention—your prompts and responses are not stored or logged
 
-No conversation history. No transcripts. No record of what you said.
+No conversation history, no transcripts, no record of what you said.
 
 ## How it Works
 
 Your voice is recorded in the browser, sent to the AI model via OpenRouter, and the response is spoken back using your device's text-to-speech. That's it.
+
+## Voice Quality
+
+Shy uses your device's built-in text-to-speech instead of cloud voices (like OpenAI or ElevenLabs). This is intentional: cloud voices send your conversations to third-party servers, which defeats the privacy goal.
+
+The trade-off is that default system voices can sound robotic. The good news is you can download much better voices for free, e.g.
+
+- **macOS**: System Settings → Accessibility → Spoken Content → System Voice → Manage Voices
+- **iOS**: Settings → Accessibility → Spoken Content → Voices → [Your Language]
+
+Look for voices marked **Premium** or **Enhanced**. These are high-quality neural voices that run locally. Once installed, open Voice Settings in the app to select them.
 
 ## Cost
 
@@ -36,7 +49,7 @@ The app uses Gemini Flash 3 which works well at very low cost. Conversations typ
 
 1. **Create an OpenRouter account** at [openrouter.ai](https://openrouter.ai)
 2. **Add credits** - $5 is plenty to start (Settings → Credits)
-3. **Open Speak** at https://martinpllu.github.io/speak
+3. **Open Shy** at https://martinpllu.github.io/shy
 4. **Connect** with your OpenRouter account
 5. **Tap the button** or press Space to talk
 

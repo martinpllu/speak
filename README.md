@@ -2,7 +2,7 @@
 
 **A private, simple, self-hostable interface for AI.**
 
-Chats with AI require subscriptions, and every word is recorded by an AI lab. Shy gives you conversations that leave no trace—no transcripts, no history, nothing stored.
+Chats with AI require subscriptions, and every word is recorded by an AI lab. Shy gives you conversations that leave no trace. No transcripts, no history, nothing stored.
 
 *Requires an OpenRouter account. Pay-as-you-go with low cost and privacy guarantees.*
 
@@ -32,7 +32,7 @@ In voice mode, your voice is recorded in the browser, sent to the AI model via O
 
 ## Voice Quality
 
-Shy uses your device's built-in text-to-speech instead of cloud voices (like OpenAI or ElevenLabs). This is intentional: cloud voices send your conversations to third-party servers, which defeats the privacy goal.
+Shy uses your device's built-in text-to-speech instead of cloud voices (like Chrome's web voices, OpenAI or ElevenLabs). This is intentional: cloud voices send your conversations to third-party servers which don't offer zero data retention (and add cost).
 
 The trade-off is that default system voices can sound robotic. The good news is you can download much better voices for free, e.g.
 
@@ -44,6 +44,8 @@ Look for voices marked **Premium** or **Enhanced**. These are high-quality neura
 ## Cost
 
 The app uses Gemini Flash 3 which works well at very low cost. Conversations typically cost a fraction of a cent, or a couple of cents with web search enabled. A few dollars of OpenRouter credit will usually last a long time.
+
+Other models supporting zero data retention can be added if there is interest.
 
 ## Getting Started
 

@@ -1268,7 +1268,7 @@
       <div class="modal-body">
         <div class="cost-stats">
           <div class="cost-stat">
-            <span class="cost-stat-label">Balance</span>
+            <span class="cost-stat-label">OpenRouter balance</span>
             <span class="cost-stat-value" id="costBalance">—</span>
           </div>
           <div class="cost-stat">
@@ -1412,6 +1412,13 @@
           </svg>
           Cost
         </button>
+        <button id="copyChatBtn">
+          <svg viewBox="0 0 24 24">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          Copy chat
+        </button>
         <div class="divider"></div>
         <button id="logoutBtn">
           <svg viewBox="0 0 24 24">
@@ -1516,6 +1523,7 @@
     const costModal = document.getElementById('costModal');
     const costModalClose = document.getElementById('costModalClose');
     const costSettingsBtn = document.getElementById('costSettingsBtn');
+    const copyChatBtn = document.getElementById('copyChatBtn');
     const costBalance = document.getElementById('costBalance');
     const costLast = document.getElementById('costLast');
     const costSession = document.getElementById('costSession');
@@ -1700,6 +1708,36 @@
 
     function closeCostModal() {
       costModal.classList.add('hidden');
+    }
+
+    async function copyChat() {
+      settingsDropdown.classList.remove('open');
+
+      if (conversationHistory.length === 0) {
+        showError('No conversation to copy');
+        return;
+      }
+
+      let markdown = '';
+      for (const msg of conversationHistory) {
+        if (msg.role === 'user') {
+          markdown += `**You:** ${msg.content}\n\n`;
+        } else {
+          markdown += `**Assistant:** ${msg.content}\n\n`;
+        }
+      }
+
+      try {
+        await navigator.clipboard.writeText(markdown.trim());
+        // Show brief success feedback
+        const originalText = copyChatBtn.textContent;
+        copyChatBtn.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+        setTimeout(() => {
+          copyChatBtn.innerHTML = `<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy chat`;
+        }, 1500);
+      } catch (e) {
+        showError('Failed to copy to clipboard');
+      }
     }
 
     // ============ Markdown Parsing ============
@@ -2782,6 +2820,9 @@ Be concise and direct in your responses. Focus on being helpful and informative.
 
       // Cost settings from dropdown
       costSettingsBtn.addEventListener('click', openCostModal);
+
+      // Copy chat
+      copyChatBtn.addEventListener('click', copyChat);
 
       // Cost modal
       costModalClose.addEventListener('click', closeCostModal);

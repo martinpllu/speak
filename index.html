@@ -1948,15 +1948,22 @@
         userEl.textContent = content;
         group.appendChild(userEl);
 
+        // Add spacer to allow scrolling message to top
+        let spacer = conversationHistoryEl.querySelector('.scroll-spacer');
+        if (!spacer) {
+          spacer = document.createElement('div');
+          spacer.className = 'scroll-spacer';
+          conversationHistoryEl.appendChild(spacer);
+        }
+        // Spacer height = viewport height so we can scroll the last item to top
+        spacer.style.height = conversationHistoryEl.clientHeight + 'px';
+
         // Scroll so user message appears at top of visible area
         requestAnimationFrame(() => {
-          const containerRect = conversationHistoryEl.getBoundingClientRect();
-          const groupRect = group.getBoundingClientRect();
-          const currentScroll = conversationHistoryEl.scrollTop;
-          const scrollOffset = groupRect.top - containerRect.top + currentScroll - 20;
-          console.log('container top:', containerRect.top, 'group top:', groupRect.top, 'currentScroll:', currentScroll, 'scrollOffset:', scrollOffset);
-          conversationHistoryEl.scrollTo({ top: scrollOffset, behavior: 'smooth' });
-          console.log('after scroll, scrollTop:', conversationHistoryEl.scrollTop);
+          conversationHistoryEl.scrollTo({
+            top: group.offsetTop - 20,
+            behavior: 'smooth'
+          });
         });
         return;
       } else {

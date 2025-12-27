@@ -2357,6 +2357,13 @@ Be concise and direct in your responses. Focus on being helpful and informative.
     async function sendTextToAPI(userText) {
       if (!userText.trim() || isProcessingText) return;
 
+      // Test feature: NNNw generates NNN words on a random topic
+      const wordMatch = userText.trim().match(/^(\d+)w$/);
+      if (wordMatch) {
+        const wordCount = parseInt(wordMatch[1], 10);
+        userText = `Write exactly ${wordCount} words on a random interesting topic. Pick something unexpected and engaging.`;
+      }
+
       isProcessingText = true;
       textSendBtn.classList.add('loading');
       textInput.disabled = true;

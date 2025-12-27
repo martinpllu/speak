@@ -59,6 +59,8 @@ Other models supporting zero data retention can be added if there is interest.
 
 It's just one HTML file. Download `index.html` and serve it from anywhere.
 
+## Running locally
+
 ```bash
 python3 -m http.server 3000
 # Open http://localhost:3000

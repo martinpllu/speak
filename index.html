@@ -1043,6 +1043,7 @@
       max-width: 560px;
       display: none;
       z-index: 50;
+      transition: bottom 0.15s ease-out;
     }
 
     .text-input-container.visible {
@@ -2911,6 +2912,27 @@ Be concise and direct in your responses. Focus on being helpful and informative.
           textSendBtn.classList.remove('active');
           sendTextToAPI(text);
         }
+      }
+
+      // Mobile keyboard handling - keep input above virtual keyboard
+      if (window.visualViewport) {
+        const baseBottom = 88; // 5.5rem in pixels
+
+        function adjustForKeyboard() {
+          const viewport = window.visualViewport;
+          const keyboardHeight = window.innerHeight - viewport.height - viewport.offsetTop;
+
+          if (keyboardHeight > 100) {
+            // Keyboard is open
+            textInputContainer.style.bottom = (keyboardHeight + 12) + 'px';
+          } else {
+            // Keyboard is closed
+            textInputContainer.style.bottom = '';
+          }
+        }
+
+        window.visualViewport.addEventListener('resize', adjustForKeyboard);
+        window.visualViewport.addEventListener('scroll', adjustForKeyboard);
       }
     }
 

@@ -2050,6 +2050,7 @@
     function updateStreamingMessage(content) {
       if (currentStreamingElement) {
         currentStreamingElement.innerHTML = parseMarkdown(content);
+        updateScrollButtonVisibility();
       }
     }
 
@@ -3030,10 +3031,7 @@ Be concise and direct in your responses. Focus on being helpful and informative.
       }
 
       // Scroll down button - show when not at bottom
-      conversationHistoryEl.addEventListener('scroll', () => {
-        const isNearBottom = conversationHistoryEl.scrollHeight - conversationHistoryEl.scrollTop - conversationHistoryEl.clientHeight < 100;
-        scrollDownBtn.classList.toggle('visible', !isNearBottom && textMode);
-      });
+      conversationHistoryEl.addEventListener('scroll', updateScrollButtonVisibility);
 
       scrollDownBtn.addEventListener('click', () => {
         conversationHistoryEl.scrollTo({
@@ -3041,6 +3039,11 @@ Be concise and direct in your responses. Focus on being helpful and informative.
           behavior: 'smooth'
         });
       });
+    }
+
+    function updateScrollButtonVisibility() {
+      const isNearBottom = conversationHistoryEl.scrollHeight - conversationHistoryEl.scrollTop - conversationHistoryEl.clientHeight < 100;
+      scrollDownBtn.classList.toggle('visible', !isNearBottom && textMode);
     }
 
     // ============ Start ============

@@ -33,6 +33,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* Remove focus outlines globally, use custom focus styles instead */
@@ -44,6 +45,13 @@
     *:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
+    }
+
+    /* Remove focus-visible on touch devices */
+    @media (hover: none) and (pointer: coarse) {
+      *:focus-visible {
+        outline: none;
+      }
     }
 
     html, body {

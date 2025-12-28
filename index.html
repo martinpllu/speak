@@ -2501,6 +2501,12 @@ Be concise and direct in your responses. Focus on being helpful and informative.
         }
         stopBtn.classList.add('hidden');
         searchToggle.classList.remove('hidden');
+        // Reset web search after each response
+        if (webSearchEnabled) {
+          webSearchEnabled = false;
+          localStorage.setItem('webSearchEnabled', 'false');
+          updateSearchToggleUI();
+        }
       }
     }
 

@@ -1,65 +1,59 @@
 # Spraff
 
-**A private, subscription-free text and voice interface for AI.**
+**One HTML file. Private AI chat. Pay as you go.**
 
-Most AI chat interfaces require subscriptions, and your data is stored by AI labs or intermediaries.
-
-Spraff gives you conversations that leave no trace. No transcripts, no history, nothing stored.
-
-*Requires an OpenRouter account. Pay-as-you-go with low cost and privacy guarantees.*
+No backend, no subscription, no data stored. Host it yourself or use it [here](https://martinpllu.github.io/spraff/).
 
 ## Features
 
-- **Private** - Zero Data Retention at every layer. No conversation history, no transcripts.
-- **Voice or text** - Talk or type, with streaming responses and markdown formatting.
-- **Self-hostable** - One HTML file. Host it yourself or use it [here](https://martinpllu.github.io/spraff/)
-- **No subscription** - Pay only for what you use via OpenRouter (fractions of a cent per conversation).
-- **Works everywhere** - Desktop and mobile, any modern browser.
+- **Private** - Zero Data Retention everywhere. Nothing saved, ever.
+- **Voice or text** - Talk or type. Responses stream back with markdown support.
+- **Self-hostable** - It's one HTML file. Host it yourself or use it [here](https://martinpllu.github.io/spraff/)
+- **No subscription** - Pay per conversation via OpenRouter (fractions of a cent each).
+- **Works everywhere** - Desktop, mobile, any modern browser.
 
 ## Privacy
 
-ChatGPT, Claude and Gemini apps store every conversation against your account. Spraff doesn't.
+ChatGPT, Claude and Gemini store every conversation against your account. Spraff doesn't.
 
-The app has no backend - it's a static HTML file. Your conversations go through [OpenRouter](https://openrouter.ai) to Gemini Flash 3 on Google Vertex with **Zero Data Retention (ZDR)** enabled. This means:
+There's no backend - it's just a static HTML file. Your conversations go through [OpenRouter](https://openrouter.ai) to Gemini Flash 3 on Google Vertex with **Zero Data Retention** enabled:
 
 - **This app**: No backend, no data collection
-- **OpenRouter**: No conversation content stored, only metadata (timestamps, usage)
-- **Google Vertex**: Zero Data Retention - your prompts and responses are not stored or logged
+- **OpenRouter**: No conversation content stored, just metadata (timestamps, usage)
+- **Google Vertex**: Zero Data Retention - prompts and responses aren't stored or logged
 
-No conversation history, no transcripts, no record of what you said.
-
-*Other models supporting zero data retention can be added if there is interest.*
+No history, no transcripts, no record of what you said.
 
 ## How it Works
 
-In voice mode, your voice is recorded in the browser, sent to the AI model via OpenRouter, and the response is spoken back using your device's text-to-speech. In text mode, you type your message and responses stream back with markdown formatting. That's it.
+Voice mode: speak, get a spoken response. Text mode: type, get a streamed response with markdown. That's it.
 
 ## Voice Quality
 
-Spraff uses your device's built-in text-to-speech instead of cloud voices (like Chrome's web voices, OpenAI or ElevenLabs). This is intentional: cloud voices send your conversations to third-party servers which don't offer zero data retention (and add cost).
+Spraff uses your device's built-in text-to-speech rather than cloud voices (like OpenAI or ElevenLabs). Why? Cloud voices send your conversations to servers that don't offer zero data retention (and they cost extra).
 
-The trade-off is that default system voices can sound robotic. The good news is you can download much better voices for free, e.g.
+Default system voices can sound a bit robotic, but you can download better ones for free:
 
 - **macOS**: System Settings → Accessibility → Spoken Content → System Voice → Manage Voices
 - **iOS**: Settings → Accessibility → Spoken Content → Voices → [Your Language]
 
-Look for voices marked **Premium** or **Enhanced**. These are high-quality neural voices that run locally. Once installed, open Voice Settings in the app to select them.
+Look for **Premium** or **Enhanced** voices - they're high-quality neural voices that run locally.
 
 ## Cost
 
-The app uses Gemini Flash 3 which works well at very low cost. Conversations typically cost a fraction of a cent, or a couple of cents with web search enabled. A few dollars of OpenRouter credit will usually last a long time.
+Spraff uses Gemini Flash 3, which is fast and cheap. Most conversations cost a fraction of a cent (a couple of cents with web search). A few dollars of OpenRouter credit goes a long way.
 
 ## Getting Started
 
 1. **Create an OpenRouter account** at [openrouter.ai](https://openrouter.ai)
-2. **Add credits** - $5 is plenty to start (Settings → Credits)
+2. **Add credits** - $5 is plenty to start
 3. **Open Spraff** at https://martinpllu.github.io/spraff
-4. **Connect** with your OpenRouter account
-5. **Tap the button** or press Space to talk, or switch to text mode to type
+4. **Connect** your OpenRouter account
+5. **Tap the button** or press Space to talk, or switch to text mode
 
 ## Self-Hosting
 
-It's just one HTML file. Download `index.html` and serve it from anywhere.
+It's one HTML file. Download `index.html` and serve it however you like.
 
 ## Running locally
 

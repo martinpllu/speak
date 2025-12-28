@@ -2492,7 +2492,10 @@ Be concise and direct in your responses. Focus on being helpful and informative.
         isProcessingText = false;
         textSendBtn.classList.remove('loading');
         textInput.disabled = false;
-        textInput.focus();
+        // Only auto-focus on desktop to avoid keyboard popping up on mobile
+        if (window.innerWidth > 600) {
+          textInput.focus();
+        }
         stopBtn.classList.add('hidden');
         searchToggle.classList.remove('hidden');
       }

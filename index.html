@@ -7,7 +7,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%232D9B83'/><text x='50' y='68' text-anchor='middle' font-family='Nunito,sans-serif' font-size='55' font-weight='800' fill='white'>s</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #FDF8F4;
@@ -96,7 +96,7 @@
       color: white;
       border: none;
       padding: 1rem 2.5rem;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.9rem;
       font-weight: 700;
       letter-spacing: 0.01em;
@@ -246,7 +246,7 @@
       bottom: -50px;
       left: 50%;
       transform: translateX(-50%);
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.65rem;
       font-weight: 500;
       letter-spacing: 0.15em;
@@ -270,7 +270,7 @@
       bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.7rem;
       color: var(--fg-muted);
       opacity: 0.6;
@@ -284,7 +284,7 @@
     .hint-text kbd {
       display: inline-block;
       padding: 0.15rem 0.5rem;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.65rem;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -314,7 +314,7 @@
       border-radius: 20px;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.65rem;
       font-weight: 500;
       letter-spacing: 0.03em;
@@ -421,34 +421,29 @@
     }
 
     .settings-menu-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+      padding: 0.5rem 0.75rem;
+      border-radius: 20px;
       border: 1px solid var(--border);
       background: var(--surface);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 0.4rem;
       transition: all 0.2s ease;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--fg);
     }
 
     .settings-menu-btn:hover {
       border-color: var(--fg-muted);
+      background: var(--surface-hover);
     }
 
     .settings-menu-btn:focus {
       outline: none;
-    }
-
-    .settings-menu-btn svg {
-      width: 16px;
-      height: 16px;
-      fill: var(--fg-muted);
-    }
-
-    .settings-menu-btn:hover svg {
-      fill: var(--fg);
     }
 
     /* Settings dropdown */
@@ -481,7 +476,7 @@
       padding: 0.75rem 1rem;
       background: none;
       border: none;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.01em;
@@ -531,13 +526,13 @@
     }
 
     .cost-stat-label {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.75rem;
       color: var(--fg-muted);
     }
 
     .cost-stat-value {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.9rem;
       font-weight: 500;
       color: var(--fg);
@@ -581,7 +576,7 @@
     }
 
     .modal-header h3 {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.05em;
@@ -666,7 +661,7 @@
     }
 
     .voice-name {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--fg);
@@ -676,7 +671,7 @@
     }
 
     .voice-lang {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.6rem;
       color: var(--fg-muted);
       margin-top: 0.1rem;
@@ -687,7 +682,7 @@
       border: 1px solid var(--border);
       color: var(--fg-muted);
       padding: 0.4rem 0.75rem;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.65rem;
       font-weight: 600;
       border-radius: 20px;
@@ -730,7 +725,7 @@
       gap: 0.4rem;
       background: none;
       border: none;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.65rem;
       color: var(--link);
       cursor: pointer;
@@ -746,7 +741,7 @@
       padding: 0.75rem;
       background: var(--bg);
       border-radius: 4px;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.65rem;
       line-height: 1.5;
       color: var(--fg-muted);
@@ -780,7 +775,7 @@
     }
 
     .current-voice-label {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.65rem;
       color: var(--fg-muted);
       text-transform: uppercase;
@@ -788,7 +783,7 @@
     }
 
     .current-voice-name {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--fg);
@@ -816,14 +811,14 @@
     }
 
     .toggle-title {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--fg);
     }
 
     .toggle-desc {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.6rem;
       color: var(--fg-muted);
     }
@@ -871,7 +866,7 @@
       background: var(--accent-light);
       border: 2px solid var(--accent);
       padding: 0.85rem 1.5rem;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--accent);
@@ -1015,7 +1010,7 @@
     }
 
     .message.assistant code {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.9em;
       background: var(--bg-warm);
       padding: 0.15em 0.35em;
@@ -1023,7 +1018,7 @@
     }
 
     .message.assistant pre {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       font-size: 0.85em;
       background: var(--bg-warm);
       padding: 0.75em 1em;
@@ -1415,38 +1410,13 @@
     <div class="logo">
       <svg width="180" height="180" viewBox="0 0 180 180">
         <defs>
-          <!-- Twill weave diagonal pattern for mask -->
-          <pattern id="twill" patternUnits="userSpaceOnUse" width="4" height="4">
-            <polygon points="0,0 2,0 0,2" fill="white"/>
-            <polygon points="2,4 4,4 4,2" fill="white"/>
-          </pattern>
-          <mask id="weave">
-            <rect width="100%" height="100%" fill="url(#twill)"/>
-          </mask>
-          <!-- Tartan stripes pattern - zoomed in 1.5x (150 instead of 100) -->
-          <pattern id="tartan-h" patternUnits="userSpaceOnUse" width="150" height="150">
-            <rect y="0" width="150" height="36" fill="#3D3D3D"/>
-            <rect y="36" width="150" height="39" fill="#C94040"/>
-            <rect y="75" width="150" height="39" fill="#C94040"/>
-            <rect y="114" width="150" height="36" fill="#3D3D3D"/>
-          </pattern>
-          <pattern id="tartan-v" patternUnits="userSpaceOnUse" width="150" height="150">
-            <rect x="0" width="36" height="150" fill="#3D3D3D"/>
-            <rect x="36" width="39" height="150" fill="#C94040"/>
-            <rect x="75" width="39" height="150" fill="#C94040"/>
-            <rect x="114" width="36" height="150" fill="#3D3D3D"/>
-          </pattern>
-          <clipPath id="circle-clip">
-            <circle cx="90" cy="90" r="85"/>
-          </clipPath>
+          <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#3D3D3D"/>
+            <stop offset="100%" stop-color="#4A4A4A"/>
+          </linearGradient>
         </defs>
-        <!-- Circle with tartan -->
-        <g clip-path="url(#circle-clip)">
-          <rect width="180" height="180" fill="url(#tartan-h)"/>
-          <rect width="180" height="180" fill="url(#tartan-v)" mask="url(#weave)"/>
-        </g>
-        <circle cx="90" cy="90" r="85" fill="none" stroke="#A33030" stroke-width="3"/>
-        <text x="90" y="102" text-anchor="middle" font-family="Nunito, sans-serif" font-size="50" font-weight="800" fill="#FDF8F4">spraff</text>
+        <circle cx="90" cy="90" r="85" fill="url(#logo-gradient)"/>
+        <text x="90" y="102" text-anchor="middle" font-family="Quicksand, sans-serif" font-size="50" font-weight="700" fill="#FDF8F4">spraff</text>
       </svg>
     </div>
     <button class="login-btn" id="loginBtn">Connect with OpenRouter</button>
@@ -1505,10 +1475,11 @@
     <!-- Settings menu - top right -->
     <div class="settings-menu" id="settingsMenu">
       <button class="settings-menu-btn" id="settingsMenuBtn" title="Settings">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="5" r="1.5"/>
-          <circle cx="12" cy="12" r="1.5"/>
-          <circle cx="12" cy="19" r="1.5"/>
+        spraff
+        <svg viewBox="0 0 24 24" width="16" height="16">
+          <circle cx="12" cy="5" r="1.5" fill="currentColor"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
         </svg>
       </button>
       <div class="settings-dropdown" id="settingsDropdown">

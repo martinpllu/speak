@@ -1,6 +1,6 @@
 # Spraff
 
-**Simple, self-hostable AI chat. Voice and text.**
+**Voice and text chat with AI, no subscription, no data stored.**
 
 Requires an OpenRouter account for pay-as-you-go model access. A few dollars go a long way with most conversations being a fraction of a cent.
 

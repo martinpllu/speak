@@ -1260,20 +1260,6 @@
       background: rgba(0, 0, 0, 0.02);
     }
 
-    .speech-hint {
-      color: var(--fg-muted);
-      font-size: 0.85em;
-      opacity: 0.7;
-    }
-
-    .speech-hint::before {
-      content: '(';
-    }
-
-    .speech-hint::after {
-      content: ')';
-    }
-
     .message.streaming::after {
       content: '▊';
       animation: blink 0.8s steps(2) infinite;
@@ -2326,14 +2312,6 @@
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
-      // Speech hints - extract and replace with placeholders
-      const speechHints = [];
-      html = html.replace(/\[\[([^\]]+)\]\]/g, (_, hint) => {
-        const placeholder = `\x00SPEECHHINT${speechHints.length}\x00`;
-        speechHints.push(`<span class="speech-hint">${escapeHtml(hint)}</span>`);
-        return placeholder;
-      });
-
       // Code blocks - extract first and replace with placeholders
       const codeBlocks = [];
       html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
@@ -2523,11 +2501,6 @@
       codeBlocks.forEach((block, i) => {
         html = html.replace(`\x00CODEBLOCK${i}\x00`, block);
         html = html.replace(`<p>\x00CODEBLOCK${i}\x00</p>`, block);
-      });
-
-      // Restore speech hints from placeholders
-      speechHints.forEach((hint, i) => {
-        html = html.replace(`\x00SPEECHHINT${i}\x00`, hint);
       });
 
       return html;
@@ -2938,7 +2911,7 @@ CRITICAL REQUIREMENTS:
 - NEVER include URLs or links - they sound terrible spoken aloud. Describe sources naturally, e.g. "according to Simon Willison's blog" not "according to simonwillison.net"
 - NEVER use domain names like ".com", ".io", ".net", etc.
 - Avoid all technical formatting, code, or special characters
-- Add pronunciation hints in double brackets for tricky terms: "AI [[A I]]", "API [[A P I]]", "$50 [[fifty dollars]]", "SQL [[S Q L]]"
+- Write "AI" as "A.I."
 - No lists or bullet points - use flowing sentences instead
 
 Respond naturally as if having a spoken conversation.`;
@@ -3260,41 +3233,8 @@ Be concise and direct in your responses. Focus on being helpful and informative.
     }
 
     // ============ Text Processing ============
-    function stripSpeechHints(text) {
-      return text.replace(/\[\[([^\]]+)\]\]/g, '');
-    }
-
-    function convertToSpeech(text) {
-      const hintRegex = /\[\[([^\]]+)\]\]/g;
-      let result = text;
-      let match;
-      const replacements = [];
-
-      while ((match = hintRegex.exec(result)) !== null) {
-        const hint = match[1];
-        const hintStart = match.index;
-        const hintEnd = hintStart + match[0].length;
-        const hintWordCount = hint.trim().split(/\s+/).length;
-
-        const textBefore = result.slice(0, hintStart).trimEnd();
-        const wordsBefore = textBefore.split(/\s+/);
-        const wordsToReplace = Math.min(hintWordCount, wordsBefore.length);
-        const replaceStart = textBefore.length - wordsBefore.slice(-wordsToReplace).join(' ').length;
-
-        replacements.push({ start: replaceStart, end: hintEnd, replacement: hint });
-      }
-
-      for (let i = replacements.length - 1; i >= 0; i--) {
-        const r = replacements[i];
-        result = result.slice(0, r.start) + r.replacement + result.slice(r.end);
-      }
-
-      return result;
-    }
-
     function sanitizeForSpeech(text) {
-      let result = convertToSpeech(text);
-      return result
+      return text
         .replace(/^#{1,6}\s+/gm, '')
         .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
         .replace(/https?:\/\/[^\s)]+/g, '')

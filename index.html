@@ -390,6 +390,10 @@
       transition: width 0.15s ease;
     }
 
+    .upload-progress.speaking .upload-progress-bar {
+      background: var(--secondary);
+    }
+
     /* Hint text below button */
     .hint-text {
       position: fixed;
@@ -1943,6 +1947,9 @@
     let speechQueue = [];
     let isSpeaking = false;
     let shouldStopSpeaking = false;
+    let speechTotalChars = 0;
+    let speechSpokenChars = 0;
+    let speechProgressInterval = null;
     let textMode = localStorage.getItem('textMode') === 'true';
     let isProcessingText = false;
     const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -2193,13 +2200,32 @@
     function showUploadProgress(visible) {
       if (visible) {
         uploadProgress.classList.add('visible');
+        uploadProgress.classList.remove('speaking');
         uploadProgressBar.style.width = '0%';
       } else {
         uploadProgress.classList.remove('visible');
+        uploadProgress.classList.remove('speaking');
       }
     }
 
     function setUploadProgress(percent) {
+      uploadProgressBar.style.width = Math.min(100, percent) + '%';
+    }
+
+    function showSpeechProgress(visible) {
+      if (visible) {
+        uploadProgress.classList.add('visible', 'speaking');
+        uploadProgressBar.style.width = '0%';
+      } else {
+        uploadProgress.classList.remove('visible', 'speaking');
+        if (speechProgressInterval) {
+          clearInterval(speechProgressInterval);
+          speechProgressInterval = null;
+        }
+      }
+    }
+
+    function setSpeechProgress(percent) {
       uploadProgressBar.style.width = Math.min(100, percent) + '%';
     }
 
@@ -3011,8 +3037,8 @@ Respond naturally as if having a spoken conversation.`;
 
         // Queue speech for the entire response, sentence by sentence
         const sentences = responseOnly.match(/[^.!?]+[.!?]+/g) || [responseOnly];
-        for (const sentence of sentences) {
-          queueSpeech(sentence.trim());
+        for (let i = 0; i < sentences.length; i++) {
+          queueSpeech(sentences[i].trim(), i === 0);
         }
 
         // Update stats from API response
@@ -3234,10 +3260,18 @@ Be concise and direct in your responses. Focus on being helpful and informative.
     }
 
     // ============ Text-to-Speech ============
-    function queueSpeech(text) {
+    function queueSpeech(text, isFirst = false) {
       if (!text.trim() || shouldStopSpeaking) return;
       const sanitized = sanitizeForSpeech(text);
       if (!sanitized) return;
+
+      // Track total characters for progress
+      if (isFirst) {
+        speechTotalChars = 0;
+        speechSpokenChars = 0;
+      }
+      speechTotalChars += sanitized.length;
+
       speechQueue.push(sanitized);
       if (!isSpeaking) processQueue();
     }
@@ -3246,6 +3280,7 @@ Be concise and direct in your responses. Focus on being helpful and informative.
       if (shouldStopSpeaking || speechQueue.length === 0) {
         isSpeaking = false;
         if (speechQueue.length === 0) {
+          showSpeechProgress(false);
           setButtonState('ready');
           searchToggle.classList.remove('hidden');
           stopBtn.classList.add('hidden');
@@ -3255,8 +3290,16 @@ Be concise and direct in your responses. Focus on being helpful and informative.
 
       isSpeaking = true;
       const text = speechQueue.shift();
+      const textLength = text.length;
+
+      // Show speech progress bar
+      if (speechTotalChars > 0) {
+        showSpeechProgress(true);
+        setSpeechProgress((speechSpokenChars / speechTotalChars) * 100);
+      }
 
       if (!window.speechSynthesis) {
+        speechSpokenChars += textLength;
         processQueue();
         return;
       }
@@ -3291,14 +3334,31 @@ Be concise and direct in your responses. Focus on being helpful and informative.
       const markEnded = () => {
         if (ended) return;
         ended = true;
+        if (speechProgressInterval) {
+          clearInterval(speechProgressInterval);
+          speechProgressInterval = null;
+        }
+        speechSpokenChars += textLength;
         processQueue();
       };
 
       utterance.onend = markEnded;
       utterance.onerror = markEnded;
 
-      // Fallback timeout for iOS - estimate ~80ms per character at normal rate
+      // Animate progress during speech using estimated timing
       const estimatedDuration = Math.max(2000, text.length * 80);
+      const startChars = speechSpokenChars;
+      const speechStartTime = performance.now();
+      speechProgressInterval = setInterval(() => {
+        if (speechTotalChars > 0) {
+          const elapsed = performance.now() - speechStartTime;
+          const charsSpoken = Math.min(textLength, (elapsed / estimatedDuration) * textLength);
+          const totalProgress = ((startChars + charsSpoken) / speechTotalChars) * 100;
+          setSpeechProgress(totalProgress);
+        }
+      }, 50);
+
+      // Fallback timeout for iOS
       setTimeout(() => {
         if (!ended && isSpeaking) {
           console.warn('Speech timeout fallback triggered');
@@ -3316,6 +3376,7 @@ Be concise and direct in your responses. Focus on being helpful and informative.
       speechQueue = [];
       speechSynthesis.cancel();
       isSpeaking = false;
+      showSpeechProgress(false);
       setButtonState('ready');
       searchToggle.classList.remove('hidden');
       stopBtn.classList.add('hidden');

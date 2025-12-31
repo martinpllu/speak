@@ -1942,7 +1942,7 @@
     let audioChunks = [];
     let audioStream = null;
     let selectedVoiceName = localStorage.getItem('selectedVoice') || null;
-    let webSearchEnabled = localStorage.getItem('webSearchEnabled') === 'true';
+    let webSearchEnabled = false; // Always default to off on page load
     let cloudVoicesEnabled = localStorage.getItem('cloudVoicesEnabled') === 'true';
     let speechQueue = [];
     let isSpeaking = false;
@@ -2888,7 +2888,9 @@
         ? 'Web search is ENABLED for this query. You have access to current information from the web.'
         : `Web search is currently DISABLED. If the user asks about recent events, current news, live data (weather, stocks, sports scores), or anything likely to have changed after your knowledge cutoff, suggest they enable web search by tapping the "${searchButtonName}" button and asking again.`;
 
-      return `You are a voice assistant. Today is ${today}. You receive audio from the user's microphone and respond with spoken output.
+      return `You are a helpful assistant that can communicate via voice or text. Today is ${today}.
+
+The user is currently in VOICE MODE - they spoke this message and your response will be read aloud via text-to-speech. Previous messages in the conversation may have been via text or voice.
 
 ${webSearchNote}
 
@@ -2900,10 +2902,12 @@ What's the weather like?
 
 Your response goes here...
 
-Your responses will be converted to speech, so:
+Because this response will be spoken aloud:
 - Be concise and conversational
 - Avoid lists, bullet points, or complex formatting
 - Don't use special characters or symbols that don't speak well
+- NEVER include URLs, links, or web addresses unless the user specifically asks for them - they sound terrible when spoken aloud
+- Avoid code snippets, technical syntax, or anything that wouldn't make sense spoken
 - For numbers, acronyms, or technical terms that might be mispronounced, add a pronunciation hint in double brackets immediately after: "API [[A P I]]" or "$50 [[fifty dollars]]"
 - Keep responses focused and to the point
 
@@ -3084,9 +3088,16 @@ Respond naturally as if having a spoken conversation.`;
         ? 'Web search is ENABLED for this query. You have access to current information from the web.'
         : `Web search is currently DISABLED. If the user asks about recent events, current news, live data (weather, stocks, sports scores), or anything likely to have changed after your knowledge cutoff, suggest they enable web search by tapping the "${searchButtonName}" button and asking again.`;
 
-      return `You are a helpful assistant. Today is ${today}.
+      return `You are a helpful assistant that can communicate via voice or text. Today is ${today}.
+
+The user is currently in TEXT MODE - they typed this message and will read your response on screen. Previous messages in the conversation may have been via text or voice.
 
 ${webSearchNote}
+
+Because this response will be read on screen, you can use:
+- Markdown formatting (bold, lists, code blocks) when helpful
+- URLs and links if relevant
+- Technical details and code snippets if appropriate
 
 Be concise and direct in your responses. Focus on being helpful and informative.`;
     }

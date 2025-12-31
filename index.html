@@ -1260,6 +1260,20 @@
       background: rgba(0, 0, 0, 0.02);
     }
 
+    .speech-hint {
+      color: var(--fg-muted);
+      font-size: 0.85em;
+      opacity: 0.7;
+    }
+
+    .speech-hint::before {
+      content: '(';
+    }
+
+    .speech-hint::after {
+      content: ')';
+    }
+
     .message.streaming::after {
       content: '▊';
       animation: blink 0.8s steps(2) infinite;
@@ -2312,6 +2326,14 @@
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
+      // Speech hints - extract and replace with placeholders
+      const speechHints = [];
+      html = html.replace(/\[\[([^\]]+)\]\]/g, (_, hint) => {
+        const placeholder = `\x00SPEECHHINT${speechHints.length}\x00`;
+        speechHints.push(`<span class="speech-hint">${escapeHtml(hint)}</span>`);
+        return placeholder;
+      });
+
       // Code blocks - extract first and replace with placeholders
       const codeBlocks = [];
       html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
@@ -2501,6 +2523,11 @@
       codeBlocks.forEach((block, i) => {
         html = html.replace(`\x00CODEBLOCK${i}\x00`, block);
         html = html.replace(`<p>\x00CODEBLOCK${i}\x00</p>`, block);
+      });
+
+      // Restore speech hints from placeholders
+      speechHints.forEach((hint, i) => {
+        html = html.replace(`\x00SPEECHHINT${i}\x00`, hint);
       });
 
       return html;
@@ -3059,11 +3086,9 @@ Respond naturally as if having a spoken conversation.`;
           updateSessionCost(usage.cost);
         }
 
-        const cleanResponse = stripSpeechHints(responseOnly);
-
-        // Save to conversation history
+        // Save to conversation history (keep speech hints for display)
         conversationHistory.push({ role: 'user', content: userTranscript || '[voice message]' });
-        conversationHistory.push({ role: 'assistant', content: cleanResponse });
+        conversationHistory.push({ role: 'assistant', content: responseOnly });
         saveConversationHistory();
         updateNewChatButton();
 

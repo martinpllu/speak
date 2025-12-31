@@ -2883,7 +2883,14 @@
         day: 'numeric'
       });
 
+      const searchButtonName = window.innerWidth <= 480 ? 'Search' : 'Web Search';
+      const webSearchNote = webSearchEnabled
+        ? 'Web search is ENABLED for this query. You have access to current information from the web.'
+        : `Web search is currently DISABLED. If the user asks about recent events, current news, live data (weather, stocks, sports scores), or anything likely to have changed after your knowledge cutoff, suggest they enable web search by tapping the "${searchButtonName}" button and asking again.`;
+
       return `You are a voice assistant. Today is ${today}. You receive audio from the user's microphone and respond with spoken output.
+
+${webSearchNote}
 
 IMPORTANT: First transcribe what the user said using [USER]...[/USER] tags at the start of your response. This is required for the system to work. Example:
 
@@ -3072,7 +3079,14 @@ Respond naturally as if having a spoken conversation.`;
         day: 'numeric'
       });
 
+      const searchButtonName = window.innerWidth <= 480 ? 'Search' : 'Web Search';
+      const webSearchNote = webSearchEnabled
+        ? 'Web search is ENABLED for this query. You have access to current information from the web.'
+        : `Web search is currently DISABLED. If the user asks about recent events, current news, live data (weather, stocks, sports scores), or anything likely to have changed after your knowledge cutoff, suggest they enable web search by tapping the "${searchButtonName}" button and asking again.`;
+
       return `You are a helpful assistant. Today is ${today}.
+
+${webSearchNote}
 
 Be concise and direct in your responses. Focus on being helpful and informative.`;
     }

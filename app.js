@@ -233,6 +233,8 @@
     async function handleOAuthCallback(code) {
       const codeVerifier = sessionStorage.getItem('code_verifier');
       if (!codeVerifier) {
+        // Clear any stale credentials on auth failure
+        clearCredentials();
         showError('Authentication failed');
         showLoginScreen();
         return;
@@ -261,14 +263,22 @@
         setupEventListeners();
       } catch (error) {
         console.error('OAuth error:', error);
+        // Clear any stale credentials on auth failure
+        clearCredentials();
         showError('Authentication failed');
         showLoginScreen();
       }
     }
 
-    function logout() {
+    function clearCredentials() {
       apiKey = null;
       localStorage.removeItem('openrouter_api_key');
+      sessionStorage.removeItem('code_verifier');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    function logout() {
+      clearCredentials();
       clearConversationHistory();
       showLoginScreen();
     }

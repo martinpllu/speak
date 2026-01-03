@@ -2057,26 +2057,101 @@ Be concise and direct in your responses. Focus on being helpful and informative.
         logout();
       });
 
-      // Main button click
-      mainButton.addEventListener('click', () => {
+      // Main button - support both tap-to-toggle and push-to-talk
+      let buttonPressStart = 0;
+      let isPushToTalk = false;
+      const LONG_PRESS_THRESHOLD = 300; // ms
+
+      function handlePressStart() {
         if (isSpeaking || speechQueue.length > 0) {
           stopSpeaking();
         }
-        if (isListening) {
-          stopRecording();
-        } else {
+        buttonPressStart = Date.now();
+        isPushToTalk = false;
+
+        // If not already listening, start recording
+        if (!isListening) {
           startRecording();
+        }
+      }
+
+      function handlePressEnd() {
+        const pressDuration = Date.now() - buttonPressStart;
+
+        if (pressDuration >= LONG_PRESS_THRESHOLD) {
+          // Long press: push-to-talk mode - stop on release
+          isPushToTalk = true;
+          if (isListening) {
+            stopRecording();
+          }
+        } else {
+          // Short press: toggle mode - already started, will stop on next press
+          isPushToTalk = false;
+        }
+      }
+
+      // Mouse events for desktop
+      mainButton.addEventListener('mousedown', handlePressStart);
+      mainButton.addEventListener('mouseup', handlePressEnd);
+      mainButton.addEventListener('mouseleave', () => {
+        // If user drags away while holding, treat as push-to-talk release
+        if (buttonPressStart > 0 && isListening) {
+          const pressDuration = Date.now() - buttonPressStart;
+          if (pressDuration >= LONG_PRESS_THRESHOLD) {
+            stopRecording();
+          }
         }
       });
 
-      // Spacebar
-      document.addEventListener('keydown', (e) => {
-        if (!voiceModal.classList.contains('hidden')) return;
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        if (!apiKey) return;
+      // Touch events for mobile - distinguish swipes from taps
+      let buttonTouchStartX = 0;
+      let buttonTouchStartY = 0;
+      let buttonTouchMoved = false;
+      let buttonTouchStartTime = 0;
+      let buttonRecordingStarted = false;
 
-        if (e.code === 'Space') {
-          e.preventDefault();
+      mainButton.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent mouse events from also firing
+        buttonTouchStartX = e.touches[0].clientX;
+        buttonTouchStartY = e.touches[0].clientY;
+        buttonTouchStartTime = Date.now();
+        buttonTouchMoved = false;
+        buttonRecordingStarted = false;
+        // Don't start recording yet - wait to see if it's a swipe
+      });
+
+      mainButton.addEventListener('touchmove', (e) => {
+        const deltaX = Math.abs(e.touches[0].clientX - buttonTouchStartX);
+        const deltaY = Math.abs(e.touches[0].clientY - buttonTouchStartY);
+        // If moved more than 20px, it's a swipe not a tap
+        if (deltaX > 20 || deltaY > 20) {
+          buttonTouchMoved = true;
+        }
+
+        // Start recording after holding for a bit without moving (push-to-talk)
+        if (!buttonTouchMoved && !buttonRecordingStarted && Date.now() - buttonTouchStartTime >= LONG_PRESS_THRESHOLD) {
+          buttonRecordingStarted = true;
+          handlePressStart();
+        }
+      });
+
+      mainButton.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        if (buttonTouchMoved) {
+          // It was a swipe - don't do anything
+          buttonTouchMoved = false;
+          return;
+        }
+
+        const pressDuration = Date.now() - buttonTouchStartTime;
+
+        if (buttonRecordingStarted) {
+          // Push-to-talk: already recording, stop now
+          if (isListening) {
+            stopRecording();
+          }
+        } else {
+          // Short tap: toggle recording
           if (isSpeaking || speechQueue.length > 0) {
             stopSpeaking();
           }
@@ -2085,6 +2160,41 @@ Be concise and direct in your responses. Focus on being helpful and informative.
           } else {
             startRecording();
           }
+        }
+        buttonRecordingStarted = false;
+      });
+
+      // Spacebar - same logic
+      let spacebarPressStart = 0;
+
+      document.addEventListener('keydown', (e) => {
+        if (!voiceModal.classList.contains('hidden')) return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (!apiKey) return;
+        if (e.repeat) return; // Ignore key repeat
+
+        if (e.code === 'Space') {
+          e.preventDefault();
+          if (isSpeaking || speechQueue.length > 0) {
+            stopSpeaking();
+          }
+          spacebarPressStart = Date.now();
+          if (!isListening) {
+            startRecording();
+          }
+        }
+      });
+
+      document.addEventListener('keyup', (e) => {
+        if (e.code === 'Space' && spacebarPressStart > 0) {
+          const pressDuration = Date.now() - spacebarPressStart;
+          spacebarPressStart = 0;
+
+          if (pressDuration >= LONG_PRESS_THRESHOLD && isListening) {
+            // Long press: stop on release
+            stopRecording();
+          }
+          // Short press: toggle mode - already started, will stop on next press
         }
       });
 
